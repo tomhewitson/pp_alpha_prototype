@@ -2,27 +2,58 @@
 
 $(document).ready(function() {
 
+  var filter = window.location.pathname.split( '/' )[2];
+
+  if (filter == "agencies") {
+    $(".filter-org-default").hide();
+    $(".filter-org-type").show();
+    $("optgroup#departments").show();
+    $("optgroup#agencies").hide();
+  } else if (filter == "services") {
+    $(".filter-org-default").hide();
+    $(".filter-org-type").show();
+    $("optgroup#departments").show();
+    $("optgroup#agencies").show();
+  } else {
+    $(".filter-org-default").show();
+    $(".filter-org-type").hide();
+    $("optgroup#departments").hide();
+    $("optgroup#agencies").hide();
+  };
+
 	// show a different org list depending on what you select
 	$("#select-org-type").change(function(){
-    if ($("#select-org-type").val() == "agencies") {
+    var selected_option = $("#select-org-type").val();
+
+    if (selected_option == "agencies") {
       $(".filter-org-default").hide();
       $(".filter-org-type").show();
       $("optgroup#departments").show();
       $("optgroup#agencies").hide();
-    }
-    if ($("#select-org-type").val() == "services") {
+      window.location.href = "agencies?organisation=government"
+    } else if (selected_option == "services") {
       $(".filter-org-default").hide();
       $(".filter-org-type").show();
       $("optgroup#departments").show();
       $("optgroup#agencies").show();
-    }
-    if ($("#select-org-type").val() == "departments") {
+      window.location.href = "services?organisation=government"
+    } else {
     	$(".filter-org-default").show();
       $(".filter-org-type").hide();
       $("optgroup#departments").hide();
       $("optgroup#agencies").hide();
+      window.location.href = "government"
     }
-	});
+ 	});
+
+  $("#select-organisation").change(function(){
+    var organisation = $("#select-organisation").val();
+    if (filter == "agencies" || filter == 'services') {    
+       window.location.href = filter + "?organisation=" + organisation;
+     } else {
+       window.location.href = filter
+     }
+  });
 
   // add another filter row when clicking 'add filter'
   $('#add-filter-row').click(function() {
