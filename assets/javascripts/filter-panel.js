@@ -5,19 +5,22 @@ $(document).ready(function() {
 	// show a different org list depending on what you select
 	$("#select-org-type").change(function(){
     if ($("#select-org-type").val() == "agencies") {
-      $(".filter-org-type").show();
-      $(".filter-org-type-2").hide();
       $(".filter-org-default").hide();
+      $(".filter-org-type").show();
+      $("optgroup#departments").show();
+      $("optgroup#agencies").hide();
     }
     if ($("#select-org-type").val() == "services") {
-      $(".filter-org-type-2").show();
-      $(".filter-org-type").hide();
       $(".filter-org-default").hide();
+      $(".filter-org-type").show();
+      $("optgroup#departments").show();
+      $("optgroup#agencies").show();
     }
     if ($("#select-org-type").val() == "departments") {
     	$(".filter-org-default").show();
-			$(".filter-org-type").hide();
-			$(".filter-org-type-2").hide();
+      $(".filter-org-type").hide();
+      $("optgroup#departments").hide();
+      $("optgroup#agencies").hide();
     }
 	});
 

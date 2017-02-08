@@ -25,11 +25,11 @@
 
   <div class="grid-row filter-panel-horizontal">
 
-    <form class="column-full filter-row mt_-5">
+    <form action="/filter" method="get" class="column-full filter-row mt_-5">
       <fieldset>
         <label>Show</label>
         <div class="form-group inline-forms width-data-type" id="filter-select-box">
-          <select class="form-control" id="select-org-type">
+          <select class="form-control" name="select-org-type" id="select-org-type">
             <option value="departments">Departments</option>
             <option value="agencies">Agencies</option>
             <option value="services">Services</option>
@@ -41,27 +41,9 @@
         </span>
         <span class="filter-org-type">
           <div class="form-group inline-forms width-data-org">
-            <select class="form-control">
+            <select class="form-control" name ="select-dept" id="select-dept">
               <option value="UK Government">UK Government</option>
-              <optgroup label="Departments">
-                <option value="Department for Business, Energy & Industrial Strategy">Department for Business, Energy &amp; Industrial Strategy</option>
-                <option value="Department for Education">Department for Education</option>
-                <option value="Department for Environment Food & Rural Affairs">Department for Environment Food &amp; Rural Affairs</option>
-                <option value="Department of Health">Department of Health</option>
-                <option value="Department for Transport">Department for Transport</option>
-                <option value="Department for Work and Pensions">Department for Work and Pensions</option>
-                <option value="HM Revenue & Customs">HM Revenue &amp; Customs</option>
-                <option value="Home Office">Home Office</option>
-                <option value="Ministry of Justice">Ministry of Justice</option>
-              </optgroup>  
-            </select>
-          </div>
-        </span>
-        <span class="filter-org-type-2">
-          <div class="form-group inline-forms width-data-org">
-            <select class="form-control">
-              <option value="UK Government">UK Government</option>
-              <optgroup label="Departments">
+              <optgroup id="departments" label="Departments">
                 <option value="Department for Business, Energy & Industrial Strategy">Department for Business, Energy &amp; Industrial Strategy</option>
                 <option value="Department for Education">Department for Education</option>
                 <option value="Department for Environment Food & Rural Affairs">Department for Environment Food &amp; Rural Affairs</option>
@@ -72,7 +54,7 @@
                 <option value="Home Office">Home Office</option>
                 <option value="Ministry of Justice">Ministry of Justice</option>
               </optgroup>
-              <optgroup label="Agencies & public bodies">
+              <optgroup id="agencies" label="Agencies & public bodies">
                 <option value="Companies House">Companies House</option>
                 <option value="Driver and Vehicle Licensing Agency">Driver and Vehicle Licensing Agency</option>
                 <option value="Driver and Vehicle Standards Agency">Driver and Vehicle Standards Agency</option>
@@ -87,12 +69,12 @@
                 <option value="Ordnance Survey">Ordnance Survey</option>
                 <option value="Skills Funding Agency">Skills Funding Agency</option>
                 <option value="Student Loans Company">Student Loans Company</option>
-              </optgroup>  
+              </optgroup>
             </select>
           </div>
         </span>
       </fieldset> 
-    </form>
+    </div>
 
     <form class="column-full filter-row">
       <fieldset>
