@@ -138,21 +138,20 @@ module.exports = class ViewController extends Controller {
   }
 
   services(req, res) {
-    var uk_government_service = this.app.services.UKGovernmentService;
-    var department_service = this.app.services.DepartmentService;
+    var task_service = this.app.services.TaskService;
+    var agency_service = this.app.services.AgencyService;
     var default_service = this.app.services.DefaultService;
+
     var Promise = require('bluebird');
     Promise.join(
-      this.app.orm.Department.find({ where : {}, sort: 'name ASC' })
-        .then( departments => { return departments }), // then call anonymous function passing in one argument called 'departments'
       this.app.orm.Agency.find({ where : {}, sort: 'name ASC' })
         .then( agencies => { return agencies }),
       this.app.orm.Task.find({ where : {}, sort: 'name ASC' })
         .then( tasks  => { return tasks }),
-      uk_government_service.sumTransactionCountsByDept()
-        .then( transaction_counts_by_dept => { return transaction_counts_by_dept.rows })
-        .then( function(transaction_counts_by_dept) {
-          return transaction_counts_by_dept.map(function(counts) {
+      task_service.sumTransactionCountsByTask()
+        .then( transaction_counts_by_task => { return transaction_counts_by_task.rows })
+        .then( function(transaction_counts_by_task) {
+          return transaction_counts_by_task.map(function(counts) {
             counts.pct_users_intended_outcome = default_service.pct_of(
               counts.transactions_with_users_intended_outcome_count, counts.transactions_with_outcome_count);
 
@@ -173,18 +172,16 @@ module.exports = class ViewController extends Controller {
 
             return counts; })
         }),
-      function (departments, agencies, tasks, transaction_counts_by_dept) {
+      function (agencies, tasks, transaction_counts_by_task) {
         res.render(
           'performance-data/government/show.html',
           {
             asset_path: '/govuk_modules/govuk_template/assets/',
-            organisation_type: 'department', // remember there is a service to determine this
-            departments: departments,
-            agencies: agencies,
+            organisation_type: 'task', // remember there is a service to determine this
             tasks: tasks,
             filter: 'services',
             organisation: req.query.organisation,
-            transaction_counts_by_dept: transaction_counts_by_dept,
+            transaction_counts: transaction_counts_by_task,
             to_3_sf: default_service.to3SF
           }
         )

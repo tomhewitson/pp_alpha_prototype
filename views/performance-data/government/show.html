@@ -117,7 +117,9 @@
             {% if filter == 'departments' %}
               <li><strong>{{ row.agencies_count}}</strong> agencies</li>
             {% endif %}
-            <li><strong>{{ row.services_count}}</strong> services</li>
+            {% if filter == 'departments' or filter == 'agencies' %}
+              <li><strong>{{ row.services_count}}</strong> services</li>
+            {% endif %}
           </ul>
         </div>
         <div class="column-one-quarter">
