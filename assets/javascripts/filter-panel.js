@@ -48,11 +48,21 @@ $(document).ready(function() {
 
   $("#select-organisation").change(function(){
     var organisation = $("#select-organisation").val();
-    if ((filter == "agencies" || filter == 'services') && organisation != 'government') {    
+    if (filter == "agencies" && organisation != 'government') {    
        window.location.href = filter + "?organisation=" + organisation;
-     } else {
+    } else if (filter == 'services' && organisation != 'government') {
+      var id = $('#select-organisation option:selected').parent().attr('id');
+      var url = filter + "?organisation=" + organisation;
+
+      if (id == 'departments') {
+        url += '&type=department'
+      } else {
+        url += '&type=agency'
+      }
+      window.location.href = url
+    } else {
        window.location.href = filter
-     }
+    }
   });
 
   // add another filter row when clicking 'add filter'

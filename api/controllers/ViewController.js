@@ -148,7 +148,7 @@ module.exports = class ViewController extends Controller {
         .then( agencies => { return agencies }),
       this.app.orm.Task.find({ where : {}, sort: 'name ASC' })
         .then( tasks  => { return tasks }),
-      task_service.sumTransactionCountsByTask()
+      task_service.sumTransactionCountsByTask(req.query.organisation, req.query.type)
         .then( transaction_counts_by_task => { return transaction_counts_by_task.rows })
         .then( function(transaction_counts_by_task) {
           return transaction_counts_by_task.map(function(counts) {

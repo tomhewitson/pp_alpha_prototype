@@ -44,8 +44,9 @@ module.exports = class TaskService extends Service {
   /**
    * Sum transactions by department
    */
-  sumTransactionCountsByTask() {
+  sumTransactionCountsByTask(filter, filter_type) {
     var sql;
+
     sql = "SELECT task.friendly_id, \
             task.name, \
             SUM(taskvolumerecord.count) as transactions_received_count, \
@@ -92,6 +93,22 @@ module.exports = class TaskService extends Service {
      FROM task \
      INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
      ";
+
+    if (filter) {
+      if (filter_type == 'department') {
+        sql += "INNER JOIN agency ON agency.id = task.agency \
+                INNER JOIN department ON department.id = agency.department \
+                WHERE department.friendly_id = '{department}'\
+               ";
+        sql = sql.replace(/{department}/, filter)
+      } else {
+        sql += "INNER JOIN agency ON agency.id = task.agency \
+                WHERE agency.friendly_id = '{agency}'\
+               ";
+        sql = sql.replace(/{agency}/, filter)
+
+      };
+    }
 
     sql += "GROUP BY task.id, task.name \
       ORDER BY transactions_received_count DESC \
