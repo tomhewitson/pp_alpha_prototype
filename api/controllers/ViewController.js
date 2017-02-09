@@ -70,6 +70,7 @@ module.exports = class ViewController extends Controller {
             return counts; })
         }),
       function (departments, agencies, tasks, transaction_counts_by_dept) {
+        console.log(transaction_counts_by_dept);
         res.render(
           'performance-data/government/show.html',
           {

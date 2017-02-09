@@ -47,48 +47,51 @@ module.exports = class TaskService extends Service {
   sumTransactionCountsByTask(filter, filter_type) {
     var sql;
 
-    sql = "SELECT task.friendly_id, \
+    sql = "SELECT task.friendly_id AS friendly_id, \
             task.name, \
-            SUM(taskvolumerecord.count) as transactions_received_count, \
-            ( \
-              SELECT SUM(taskvolumerecord.count) as transactions_received_online_count \
-              FROM task \
-              INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
-              WHERE taskvolumerecord.channel = 'online' \
+            ( SELECT SUM(count) as transactions_received_count \
+              FROM taskvolumerecord \
+              WHERE taskvolumerecord.task = task.id \
             ), \
             ( \
-              SELECT SUM(taskvolumerecord.count) as transactions_received_phone_count \
-              FROM task \
-              INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
-              WHERE taskvolumerecord.channel = 'phone' \
+              SELECT SUM(count) as transactions_received_online_count \
+              FROM taskvolumerecord \
+              WHERE taskvolumerecord.task = task.id \
+              AND taskvolumerecord.channel = 'online' \
             ), \
             ( \
-              SELECT SUM(taskvolumerecord.count) as transactions_received_paper_count \
-              FROM task \
-              INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
-              WHERE taskvolumerecord.channel = 'paper' \
+              SELECT SUM(count) as transactions_received_phone_count \
+              FROM taskvolumerecord \
+              WHERE taskvolumerecord.task = task.id \
+              AND taskvolumerecord.channel = 'phone' \
             ), \
             ( \
-              SELECT SUM(taskvolumerecord.count) as transactions_received_face_to_face_count \
-              FROM task \
-              INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
-              WHERE taskvolumerecord.channel = 'face-to-face' \
+              SELECT SUM(count) as transactions_received_paper_count \
+              FROM taskvolumerecord \
+              WHERE taskvolumerecord.task = task.id \
+              AND taskvolumerecord.channel = 'paper' \
             ), \
             ( \
-              SELECT SUM(taskvolumerecord.count) as transactions_received_other_count \
-              FROM task \
-              INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
-              WHERE taskvolumerecord.channel = 'other' \
+              SELECT SUM(count) as transactions_received_face_to_face_count \
+              FROM taskvolumerecord \
+              WHERE taskvolumerecord.task = task.id \
+              AND taskvolumerecord.channel = 'face-to-face' \
             ), \
             ( \
-              SELECT SUM(transactionsendinginanoutcome.all_outcomes_count) as transactions_with_outcome_count \
-              FROM task \
-              INNER JOIN transactionsendinginanoutcome ON transactionsendinginanoutcome.task = task.id \
+              SELECT SUM(count) as transactions_received_other_count \
+              FROM taskvolumerecord \
+              WHERE taskvolumerecord.task = task.id \
+              AND taskvolumerecord.channel = 'other' \
             ), \
             ( \
-              SELECT SUM(transactionsendinginanoutcome.users_intended_outcome_count) as transactions_with_users_intended_outcome_count \
-              FROM task \
-              INNER JOIN transactionsendinginanoutcome ON transactionsendinginanoutcome.task = task.id \
+              SELECT SUM(all_outcomes_count) as transactions_with_outcome_count \
+              FROM transactionsendinginanoutcome \
+              WHERE transactionsendinginanoutcome.task = task.id \
+            ), \
+            ( \
+              SELECT SUM(users_intended_outcome_count) as transactions_with_users_intended_outcome_count \
+              FROM transactionsendinginanoutcome \
+              WHERE transactionsendinginanoutcome.task = task.id \
             ) \
      FROM task \
      INNER JOIN taskvolumerecord ON taskvolumerecord.task = task.id \
