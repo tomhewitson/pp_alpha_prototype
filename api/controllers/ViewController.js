@@ -75,11 +75,9 @@ module.exports = class ViewController extends Controller {
           {
             asset_path: '/govuk_modules/govuk_template/assets/',
             organisation_type: 'department', // remember there is a service to determine this
-            departments: departments,
-            agencies: agencies,
             tasks: tasks,
             filter: 'departments',
-            transaction_counts_by_dept: transaction_counts_by_dept,
+            transaction_counts: transaction_counts_by_dept,
             to_3_sf: default_service.to3SF
           }
         )
@@ -88,18 +86,17 @@ module.exports = class ViewController extends Controller {
   }
 
   agencies(req, res) {
-    var uk_government_service = this.app.services.UKGovernmentService;
     var department_service = this.app.services.DepartmentService;
+    var agency_service = this.app.services.AgencyService;
     var default_service = this.app.services.DefaultService;
+
     var Promise = require('bluebird');
     Promise.join(
-      this.app.orm.Department.find({ where : {}, sort: 'name ASC' })
-        .then( departments => { return departments }), // then call anonymous function passing in one argument called 'departments'
       this.app.orm.Agency.find({ where : {}, sort: 'name ASC' })
         .then( agencies => { return agencies }),
       this.app.orm.Task.find({ where : {}, sort: 'name ASC' })
         .then( tasks  => { return tasks }),
-      uk_government_service.sumTransactionCountsByDept()
+      agency_service.sumTransactionCountsByDept(req.query.organisation)
         .then( transaction_counts_by_dept => { return transaction_counts_by_dept.rows })
         .then( function(transaction_counts_by_dept) {
           return transaction_counts_by_dept.map(function(counts) {
@@ -123,18 +120,16 @@ module.exports = class ViewController extends Controller {
 
             return counts; })
         }),
-      function (departments, agencies, tasks, transaction_counts_by_dept) {
+      function (agencies, tasks, transaction_counts_by_dept) {
         res.render(
           'performance-data/government/show.html',
           {
             asset_path: '/govuk_modules/govuk_template/assets/',
-            organisation_type: 'department', // remember there is a service to determine this
-            departments: departments,
-            agencies: agencies,
+            organisation_type: 'agency', // remember there is a service to determine this
             tasks: tasks,
             filter: 'agencies',
             organisation: req.query.organisation,
-            transaction_counts_by_dept: transaction_counts_by_dept,
+            transaction_counts: transaction_counts_by_dept,
             to_3_sf: default_service.to3SF
           }
         )

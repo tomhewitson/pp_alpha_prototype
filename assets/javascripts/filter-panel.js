@@ -30,13 +30,13 @@ $(document).ready(function() {
       $(".filter-org-type").show();
       $("optgroup#departments").show();
       $("optgroup#agencies").hide();
-      window.location.href = "agencies?organisation=government"
+      window.location.href = "agencies"
     } else if (selected_option == "services") {
       $(".filter-org-default").hide();
       $(".filter-org-type").show();
       $("optgroup#departments").show();
       $("optgroup#agencies").show();
-      window.location.href = "services?organisation=government"
+      window.location.href = "services"
     } else {
     	$(".filter-org-default").show();
       $(".filter-org-type").hide();
@@ -48,7 +48,7 @@ $(document).ready(function() {
 
   $("#select-organisation").change(function(){
     var organisation = $("#select-organisation").val();
-    if (filter == "agencies" || filter == 'services') {    
+    if ((filter == "agencies" || filter == 'services') && organisation != 'government') {    
        window.location.href = filter + "?organisation=" + organisation;
      } else {
        window.location.href = filter

@@ -102,42 +102,44 @@
 
   <div class="grid-row">
     <div class="column-one-third">
-      <p>Showing <strong>12</strong> departments</p>
+      <p>Showing <strong>{{ transaction_counts.length }}</strong> {{ filter }}</p>
     </div>
   </div>    
 
   <div class="grid-row">
     <ul class="filter-cards column-full">
       
-      {% for department in transaction_counts_by_dept %}
+      {% for row in transaction_counts %}
       <li class="column-full">
         <div class="column-one-quarter">
-          <h2 class="bold-medium"><a href="{{ department.friendly_id }}">{{ department.name }}</a></h2>
+          <h2 class="bold-medium"><a href="{{ row.friendly_id }}">{{ row.name }}</a></h2>
           <ul class="list font-xsmall">
-            <li><strong>{{ department.agencies_count}}</strong> agencies</li>
-            <li><strong>{{ department.services_count}}</strong> services</li>
+            {% if filter == 'departments' %}
+              <li><strong>{{ row.agencies_count}}</strong> agencies</li>
+            {% endif %}
+            <li><strong>{{ row.services_count}}</strong> services</li>
           </ul>
         </div>
         <div class="column-one-quarter">
           <h3 class="data">
-            <span class="data-item bold-large">{{ to_3_sf(department.transactions_received_count) }}</span>
+            <span class="data-item bold-large">{{ to_3_sf(row.transactions_received_count) }}</span>
             <span class="data-item bold-xsmall">transactions received</span>
           </h3>
           <ul class="list font-xsmall">
-            <li><strong>{{ department.pct_received_online }}%</strong> online</li>
-            <li><strong>{{ department.pct_received_phone }}%</strong> phone</li>
-            <li><strong>{{ department.pct_received_paper }}%</strong> paper</li>
-            <li><strong>{{ department.pct_received_face_to_face }}%</strong> face-to-face</li>
-            <li><strong>{{ department.pct_received_other }}%</strong> other</li>
+            <li><strong>{{ row.pct_received_online }}%</strong> online</li>
+            <li><strong>{{ row.pct_received_phone }}%</strong> phone</li>
+            <li><strong>{{ row.pct_received_paper }}%</strong> paper</li>
+            <li><strong>{{ row.pct_received_face_to_face }}%</strong> face-to-face</li>
+            <li><strong>{{ row.pct_received_other }}%</strong> other</li>
           </ul>
         </div>
         <div class="column-one-quarter">
           <h3 class="data">
-            <span class="data-item bold-large">{{ to_3_sf(department.transactions_with_outcome_count) }}</span>
+            <span class="data-item bold-large">{{ to_3_sf(row.transactions_with_outcome_count) }}</span>
             <span class="data-item bold-xsmall">transactions ending in an outcome</span>
           </h3>
           <ul class="list font-xsmall">
-            <li><strong>{{ department.pct_users_intended_outcome }}%</strong> end in user's intended outcome</li>
+            <li><strong>{{ row.pct_users_intended_outcome }}%</strong> end in user's intended outcome</li>
           </ul>
         </div>
         <div class="column-one-quarter">
